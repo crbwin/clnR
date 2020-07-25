@@ -370,6 +370,13 @@ corstarsl.all.kiIN2 <- function(x, des, rows=auto, cols=auto, tri = "lower"){
   return(Rnew)
 }
 
+#' Basic correlation table
+#' @param df data frame of vars to analyse
+#' @param control.vars variables to control for in analysis
+#' @param rows number of variables used as rows; used in conjunction with cols. Default is all vars
+#' @param cols number of variables used as columns; used in conjunction with rowss. Default is all vars
+#' @param triangle toggle lower/upper triangle output of correlations
+#' @param copy Should this table be 'copiable' or formatted?
 #' @export
 
 corrtrol <- function(df, control.vars, rows=auto, cols=auto, triangle = "lower", copy=FALSE){
@@ -380,7 +387,7 @@ corrtrol <- function(df, control.vars, rows=auto, cols=auto, triangle = "lower",
     auto <- "no"
 
     corrtab <- df %>%
-      corstarsl.all.kiIN2(., control.vars, rows, cols, tri = triange)
+      corstarsl.all.kiIN2(., control.vars, rows, cols, tri = triangle)
 
   } else if(class(rows)=="numeric"&rows>0){
     auto <- 0
