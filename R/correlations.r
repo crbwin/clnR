@@ -303,11 +303,11 @@ corstarsl.all.kiIN2 <- function(x, des, rows=auto, cols=auto){
   p <- psych::corr.p(R, n)$p
 
   ## define notions for significance levels; spacing is important.
-  mystars <- ifelse(p < .001, " ***",
-                    ifelse(p < .01, " **",
-                           ifelse(p < .05, " *", # significant
-                                  ifelse(p < 0.1, " ???", # marginal
-                                         ifelse(p < 0.15, " .", " "))))) # trending
+  mystars <- ifelse(p < .001, "***",
+                    ifelse(p < .01, "**",
+                           ifelse(p < .05, "*", # significant
+                                  ifelse(p < 0.1, "†", # marginal
+                                         ifelse(p < 0.15, ".", " "))))) # trending
 
   ## trunctuate the matrix that holds the correlations to two decimal
   R <- format(round(cbind(rep(-1.11, ncol(x)), R), 3))[,-1]
@@ -403,11 +403,11 @@ corstarsl.all.kiIN <- function(x, rows=auto, cols=auto){
   #p <- p[1:rows, col.start:col.end]
 
   ## define notions for significance levels; spacing is important.
-  mystars <- ifelse(p < .001, " ***",
-                    ifelse(p < .01, " **",
-                           ifelse(p < .05, " *", # significant
-                                  ifelse(p < 0.1, " †", # marginal
-                                         ifelse(p < 0.15, " .", " "))))) # trending
+  mystars <- ifelse(p < .001, "***",
+                    ifelse(p < .01, "**",
+                           ifelse(p < .05, "*", # significant
+                                  ifelse(p < 0.1, "†", # marginal
+                                         ifelse(p < 0.15, ".", " "))))) # trending
 
   ## trunctuate the matrix that holds the correlations to two decimal
   R <- format(round(cbind(rep(-1.11, ncol(x)), R), 3))[,-1]
@@ -455,7 +455,7 @@ corstarsl.all.kiIN <- function(x, rows=auto, cols=auto){
 #' @copy Should this table be 'copiable' or formatted?
 #' @export
 
-corr_table <- function(df, vars, rows=auto, cols=auto, copy=FALSE){
+table.corr <- function(df, vars, rows=auto, cols=auto, copy=FALSE){
 
   auto = 0
 
