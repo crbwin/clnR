@@ -450,9 +450,9 @@ corstarsl.all.kiIN <- function(x, rows=auto, cols=auto){
 #' Basic correlation table
 #' @param df data frame
 #' @param vars quosure of variables to analyze
-#' @rows number of variables used as rows; used in conjunction with cols. Default is all vars
-#' @cols number of variables used as columns; used in conjunction with rowss. Default is all vars
-#' @copy Should this table be 'copiable' or formatted?
+#' @param rows number of variables used as rows; used in conjunction with cols. Default is all vars
+#' @param cols number of variables used as columns; used in conjunction with rowss. Default is all vars
+#' @param copy Should this table be 'copiable' or formatted?
 #' @export
 
 table.corr <- function(df, vars, rows=auto, cols=auto, copy=FALSE){
