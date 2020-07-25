@@ -259,7 +259,7 @@ HARcorr <- function(df, vars, describe = TRUE, numbers = TRUE, headers = NULL, s
 
 
 ######### Partial correlations
-corstarsl.all.kiIN2 <- function(x, des, rows=auto, cols=auto){
+corstarsl.all.kiIN2 <- function(x, des, rows=auto, cols=auto, tri = "lower"){
   require(Hmisc)
 
   auto = 0
@@ -341,12 +341,38 @@ corstarsl.all.kiIN2 <- function(x, des, rows=auto, cols=auto){
     Rnew <- cbind(Rnew[1:length(Rnew)-1])
 
   }
+
+
+  if(tri=="lower"){
+
+    ## remove upper triangle
+    Rnew <- as.matrix(Rnew)
+    Rnew[upper.tri(Rnew, diag = TRUE)] <- ""
+    Rnew <- as.data.frame(Rnew)
+
+    ## remove last column and return the matrix (which is now a data frame)
+    Rnew <- cbind(Rnew[1:length(Rnew)-1])
+
+  } else{
+
+    Rnew <- as.matrix(Rnew)
+    Rnew[lower.tri(Rnew, diag = TRUE)] <- ""
+    Rnew <- as.data.frame(Rnew)
+
+    ## remove last column and return the matrix (which is now a data frame)
+    #Rnew <- cbind(Rnew[1:length(Rnew)-1])
+    Rnew <- cbind(Rnew[1:row.l, col.start:col.end])
+
+  }
+
+
+
   return(Rnew)
 }
 
 #' @export
 
-corrtrol <- function(df, control.vars, rows=auto, cols=auto, copy=FALSE){
+corrtrol <- function(df, control.vars, rows=auto, cols=auto, triangle = "lower", copy=FALSE){
 
   auto = 0
 
@@ -354,19 +380,19 @@ corrtrol <- function(df, control.vars, rows=auto, cols=auto, copy=FALSE){
     auto <- "no"
 
     corrtab <- df %>%
-      corstarsl.all.kiIN2(., control.vars, rows, cols)
+      corstarsl.all.kiIN2(., control.vars, rows, cols, tri = triange)
 
   } else if(class(rows)=="numeric"&rows>0){
     auto <- 0
 
     corrtab <- df %>%
-      corstarsl.all.kiIN2(., control.vars, rows, cols)
+      corstarsl.all.kiIN2(., control.vars, rows, cols, tri = triangle)
 
   } else {
     auto <- 0
 
     corrtab <- df %>%
-      corstarsl.all.kiIN2(., control.vars) %>%
+      corstarsl.all.kiIN2(., control.vars, tri = triangle) %>%
       tibble::rownames_to_column(., var = "var") %>%
       # mutate(var = new_row_names(.$var)) %>%
       slice(-1)
