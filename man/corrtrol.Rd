@@ -2,14 +2,17 @@
 % Please edit documentation in R/correlations.r
 \name{corrtrol}
 \alias{corrtrol}
-\title{Basic correlation table}
+\title{Partial correlation table}
 \usage{
 corrtrol(
   df,
+  vars,
   control.vars,
   rows = auto,
   cols = auto,
+  names = NULL,
   triangle = "lower",
+  round = 3,
   copy = FALSE
 )
 }
@@ -27,5 +30,5 @@ corrtrol(
 \item{copy}{Should this table be 'copiable' or formatted?}
 }
 \description{
-Basic correlation table
+Partial correlation table
 }

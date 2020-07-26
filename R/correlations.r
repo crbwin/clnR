@@ -356,3 +356,201 @@ table.corr <- function(df, vars, rows=auto, cols=auto, copy=FALSE){
   }
 
 }
+
+
+
+######### Partial correlations
+corstarsl.all.kiIN3 <- function(data, var.list, des, rows=auto, cols=auto, tri = "lower", round = 3){
+  require(Hmisc)
+
+  auto = 0
+
+  x <- data %>% select(!!!var.list)
+  #vars <- quos(vars)
+
+  #col.end <- ncol(x)-length(des)
+  #col.start <- rows+1
+
+  if(class(rows)=="character"& nchar(rows)>1){
+    auto <- "no"
+    vars <- cbind(rows, cols, des)
+    row.l = length(rows)
+    col.l = length(cols)
+    des.l = length(des)
+
+    col.start <- row.l+1
+    col.end <-row.l+col.l
+
+    x <- x %>% select(vars)
+
+  } else if(class(rows)=="numeric"& rows>0){
+    auto <- 0
+    col.end <- ncol(x)-length(des)
+    col.start <- rows+1
+    row.l <- rows
+
+
+  } else if (rows==auto){
+
+    auto <- 0
+  } else {
+
+    auto <- 0
+  }
+
+  n <- as.numeric(nrow(x)-length(des))
+  c <- as.numeric(ncol(x)-length(des))
+  x <- as.matrix(x)
+  R <- psych::partial.r(x, x = c(1:c), y = des)
+  p <- psych::corr.p(R, n)$p
+
+  ## define notions for significance levels; spacing is important.
+  mystars <- ifelse(p < .001, "***",
+                    ifelse(p < .01, "**",
+                           ifelse(p < .05, "*", # significant
+                                  ifelse(p < 0.1, "†",
+                                         ifelse(p > 0.10, " ", NA))))) #marginal
+
+  ## trunctuate the matrix that holds the correlations to x number of decimals
+  R <- format(round(cbind(rep(-1.11, ncol(x)), R), round))[,-1]
+
+
+  ## build a new matrix that includes the correlations with their apropriate stars
+  Rnew <- matrix(paste0(R, mystars, sep=" "), ncol=ncol(R))
+  diag(Rnew) <- paste(diag(R), " ", sep="")
+
+  ##The following two lines of code name the rows to match the columns, and truncate any name (for rows and cols) longer than 20 characters
+  rownames(Rnew) <- ifelse(nchar(colnames(R)) > 20, paste0(substr(colnames(R), start = 1, stop = 20), "..."), colnames(R))
+  colnames(Rnew) <- paste(ifelse(nchar(colnames(R)) > 20, paste0(substr(colnames(R), start = 1, stop = 20), "..."), colnames(R)), "", sep="")
+
+  if(rows!=auto & cols!=auto){
+    ## remove lower triangle
+    Rnew <- as.matrix(Rnew)
+    Rnew[lower.tri(Rnew, diag = TRUE)] <- ""
+    Rnew <- as.data.frame(Rnew)
+
+    ## remove last column and return the matrix (which is now a data frame)
+    #Rnew <- cbind(Rnew[1:length(Rnew)-1])
+    Rnew <- cbind(Rnew[1:row.l, col.start:col.end])
+    #Rnew <- Rnew[1:row.l, col.start:col.end]
+
+  } else if(tri=="lower"){
+
+    ## remove upper triangle
+    Rnew <- as.matrix(Rnew)
+    Rnew[upper.tri(Rnew, diag = TRUE)] <- ""
+    Rnew <- as.data.frame(Rnew)
+
+    ## remove last column and return the matrix (which is now a data frame)
+    Rnew <- cbind(Rnew[1:length(Rnew)-1])
+
+  } else{
+
+    Rnew <- as.matrix(Rnew)
+    Rnew[lower.tri(Rnew, diag = TRUE)] <- ""
+    Rnew <- as.data.frame(Rnew[-c(nrow(Rnew)), ])
+
+    ## remove last column and return the matrix (which is now a data frame)
+    #Rnew <- cbind(Rnew[1:length(Rnew)-1])
+    Rnew <- cbind.data.frame(Rnew[1:length(Rnew)])
+
+  }
+
+
+
+  return(Rnew)
+}
+
+#' Partial correlation table
+#' @param df data frame of vars to analyse
+#' @param control.vars variables to control for in analysis
+#' @param rows number of variables used as rows; used in conjunction with cols. Default is all vars
+#' @param cols number of variables used as columns; used in conjunction with rowss. Default is all vars
+#' @param triangle toggle lower/upper triangle output of correlations
+#' @param copy Should this table be 'copiable' or formatted?
+#' @export
+
+corrtrol <- function(df, vars, control.vars, rows=auto, cols=auto, names = NULL, triangle = "lower", round = 3, copy=FALSE){
+
+  auto = 0
+
+  if(class(rows)=="character"&nchar(rows)>1){
+    auto <- "no"
+
+    corrtab <- df %>%
+      corstarsl.all.kiIN3(., vars, control.vars, rows, cols, tri = triangle, round = round)
+
+  } else if(class(rows)=="numeric"&rows>0){
+    auto <- 0
+
+    corrtab <- df %>%
+      corstarsl.all.kiIN3(., vars, control.vars, rows, cols, tri = triangle, round = round)
+
+  } else {
+    auto <- 0
+
+    corrtab <- df %>%
+      corstarsl.all.kiIN3(., vars, control.vars, tri = triangle, round = round) %>%
+      tibble::rownames_to_column(., var = "var")
+    # mutate(var = new_row_names(.$var)) %>%
+    # slice(-1)
+
+  }
+
+
+  if(!is.null(names)){
+
+    if(triangle=="lower"){
+      corrtab <- corrtab %<>%
+        mutate(var = names) #%>%
+      # mutate(var = new_row_names(.$var)) %>%
+      #slice(-1)
+      colnames(corrtab) <- c("var", names[1:length(names)-1])
+
+    } else if(triangle=="upper"){
+      colnames(corrtab) <- c("var", names)
+
+      # corrtab %<>% mutate(
+      #
+      #   var = names[1:length(names)-1],
+      #   .before = .[, 1]
+      # )
+      corrtab[,1] <- names[1:length(names)-1]
+
+    } else {
+
+      print("Please choose 'triangle = upper' or 'triangle = lower'.")
+    }
+
+
+  } else{
+
+  }
+
+
+
+
+  ## APA formatting: Get rid of leading 0's
+
+  corrtab <- data.frame(lapply(corrtab, as.character), stringsAsFactors=FALSE)
+  #corrtab[1, -c(1)] <- " "
+
+  for(i in 1:nrow(corrtab)){
+
+    corrtab[i, -c(1)] %<>% stringr::str_replace("0.", ".")
+
+  }
+
+
+  if(copy==FALSE){
+
+    corrtab %>% kable(format = "html") %>%
+      kable_styling(bootstrap_options = c("striped", "hover", "responsive"), font_size = 12, full_width = F)
+
+  }else{
+    corrtab
+  }
+
+
+}
+
