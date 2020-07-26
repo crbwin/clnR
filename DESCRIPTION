@@ -1,13 +1,12 @@
 Package: clnR2
 Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.1
+Version: 0.0.0.9000
 Authors@R: 
     person(given = "Chayce",
            family = "Baldwin",
            role = c("aut", "cre"),
            email = "baldwin.chayce@gmail.com",
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Depends: careless, Hmisc, tidyverse, psych, broman
 Description: This package contains functions that make it easier to clean and report basic psychological data.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to
     pick a license
