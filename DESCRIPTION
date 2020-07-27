@@ -1,5 +1,5 @@
 Package: clnR2
-Title: What the Package Does (One Line, Title Case)
+Title: Clean and report psychological data
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Chayce",
