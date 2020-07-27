@@ -7,7 +7,6 @@ Authors@R:
            role = c("aut", "cre"),
            email = "baldwin.chayce@gmail.com",
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Depends: ggplot2, broman, magrittr, stringr, kableExtra, rlang, psych, tibble, dplyr
 Description: This package contains functions that make it easier to clean and report basic psychological data.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to
     pick a license
