@@ -172,3 +172,26 @@ table.freq <- function(data, vars){
 
 }
 
+
+#' Produces a table of frequency information for a variable
+#'
+#' This function produces a table of frequency information for a variable, including the n and % for each level, as well as cumulative n and %.
+#' This function is designed to mirror the comprehensive frequency output provided by STATA.
+#'
+#' @param data data frame
+#' @param ... variable to analyze
+#' @return a table with frequency information
+#' @export
+
+STATAtab <- function(data, ...){
+
+  vector <- quos(...)
+
+  data %>%
+    group_by(!!!vector) %>%
+    summarise(n = n()) %>%
+    mutate('Cum. N' = (cumsum(n)),
+           '%' = round((n / sum(n)), 3)*100,
+           'Cum. %' = round(cumsum(freq = n / sum(n)),3)*100) %>% kable() %>% kable_styling(bootstrap_options = c("striped", "hover"))
+}
+
