@@ -39,13 +39,13 @@ nutshell <- function(data, vector, type = "family"){
 
     desc <- data %>%
       select(!!vector) %>%
-      psych::describe %>% round(., digits = 2)
+      psych::describe %>% round(., digits = 2) %>% data.frame()
 
   } else{
 
     desc <- data %>%
       select(!!!vector) %>%
-      describe %>% round(., digits = 2)
+      describe %>% round(., digits = 2) %>%  data.frame()
 
   }
 
