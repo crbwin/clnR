@@ -4,18 +4,18 @@
 \alias{nutshell}
 \title{Produce a short report of descriptives}
 \usage{
-nutshell(data, vector, type = "family")
+nutshell(data, vector, type = "group")
 }
 \arguments{
 \item{data}{data frame}
 
-\item{vector}{quosure of items to analyze}
+\item{vector}{quosure of items or name of single item to analyze}
 
-\item{type}{is this for a single variable ('lonely') or a group of variables ('family')?}
+\item{type}{is this for a single variable ('single') or a group of variables ('group')?}
 }
 \value{
-a table of n, mean, and sd for variables
+a table of n, mean, and sd and range for variables
 }
 \description{
-This function produces descriptives in a 'nutshell'
+This function produces descriptives in a 'nutshell'.
 }

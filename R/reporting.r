@@ -1,9 +1,10 @@
 
 
-#' Produce a formatted table of frequencies for a single variable
+#' Produce a formatted table of proportions of frequency for a single variable
 #'
 #'
 #' @param data data frame
+#' @param ... name of single variabe
 #' @param wide should the table be full width or compressed?
 #' @return a formatted table of proportions of frequency for a single variable
 #' @export
@@ -23,17 +24,17 @@ tabshell <- function(data, ..., wide = TRUE){
 
 #' Produce a short report of descriptives
 #'
-#' This function produces descriptives in a 'nutshell'
+#' This function produces descriptives in a 'nutshell'.
 #'
 #' @param data data frame
-#' @param vector quosure of items to analyze
-#' @param type is this for a single variable ('lonely') or a group of variables ('family')?
-#' @return a table of n, mean, and sd for variables
+#' @param vector quosure of items or name of single item to analyze
+#' @param type is this for a single variable ('single') or a group of variables ('group')?
+#' @return a table of n, mean, and sd and range for variables
 #' @export
 
-nutshell <- function(data, vector, type = "family"){
+nutshell <- function(data, vector, type = "group"){
 
-  if(type=="lonely"){
+  if(type=="single"){
 
     vector <- enquo(vector)
 

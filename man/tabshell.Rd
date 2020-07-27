@@ -2,12 +2,14 @@
 % Please edit documentation in R/reporting.r
 \name{tabshell}
 \alias{tabshell}
-\title{Produce a formatted table of frequencies for a single variable}
+\title{Produce a formatted table of proportions of frequency for a single variable}
 \usage{
 tabshell(data, ..., wide = TRUE)
 }
 \arguments{
 \item{data}{data frame}
+
+\item{...}{name of single variabe}
 
 \item{wide}{should the table be full width or compressed?}
 }
@@ -15,5 +17,5 @@ tabshell(data, ..., wide = TRUE)
 a formatted table of proportions of frequency for a single variable
 }
 \description{
-Produce a formatted table of frequencies for a single variable
+Produce a formatted table of proportions of frequency for a single variable
 }
