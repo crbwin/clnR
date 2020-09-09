@@ -266,3 +266,62 @@ partR <- function(model){
   sqrt(rsq::rsq.partial(model)$partial.rsq[1]) %>% round(., digits = 3)
 
 }
+
+#' Produces formatted histogram
+#'
+#' This function, exported from the local package 'vizzify', produces a histogram with count and proportions for each bin.
+#'
+#' @param data data frame
+#' @param x variable to visualize
+#' @param type specifies whether the variable is a factor or numeric variable. Because numeric variables have many thin bins, this removes proportion
+#' and count data that would clog the graph
+#' @param title main title for the top of the graph
+#' @param subtitle subtitle to go under the main title
+#' @param xlab label for the x axis
+#' @param ylab label for the y axis; default is "Count"
+#' @return Formatted histogram
+#' @export
+
+
+histomize <- function(data, x, type = "factor", title, subtitle, xlab, ylab = "Count"){
+
+  title <- enquo(title)
+  subtitle <- enquo(subtitle)
+  xlab <- enquo(xlab)
+  ylab <- enquo(ylab)
+
+  x_var <- enquo(x)
+
+
+  if(type=="numeric"){
+
+    data %>%
+      filter(!is.na(!!x_var)) %>%
+      ggplot() +
+      geom_histogram(aes(x = !!x_var, y = ..density..), fill = "#599ad3", bins = 35) +
+      ggtitle(title, subtitle) +
+      theme_classic() +
+      xlab(xlab) + ylab("Density")
+
+  } else if(type=="factor") {
+
+    data %>%
+      filter(!is.na(!!x_var)) %>%
+      ggplot() +
+      geom_bar(aes(x = !!x_var), fill = "#599ad3") +
+      ggtitle(title, subtitle) +
+      theme_classic() +
+      xlab(xlab) + ylab(ylab) +
+      #geom_text(stat = "count", aes(x = !!x_var, label = ..count.., y = ..count..), vjust = -.5) +
+      geom_text(stat = "count",
+                aes(x = !!x_var, label=..count.., y = ..count..),
+                vjust = -.5) +
+      geom_text(stat = "count",
+                aes(x = !!x_var, label= paste0(" (", format(..prop..*100, digits = 1), "%)"), y = ..count.., group = 1),
+                vjust = +1.5)
+  } else {
+
+    print("Not discrete or continuous variable")
+  }
+
+}
