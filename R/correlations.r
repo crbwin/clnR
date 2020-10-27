@@ -129,7 +129,7 @@ HARcorr <- function(df, vars, describe = TRUE, numbers = TRUE, headers = NULL, s
   if(is.null(names)){
 
     corrtab <- df %>%
-      select(!!!vars) %>%
+      dplyr::select(!!!vars) %>%
       corstars() %>%
       rownames_to_column(., var = "var") %>%
       # mutate(var = new_row_names(.$var)) %>%
@@ -137,7 +137,7 @@ HARcorr <- function(df, vars, describe = TRUE, numbers = TRUE, headers = NULL, s
   } else{
 
     corrtab <- df %>%
-      select(!!!vars) %>%
+      dplyr::select(!!!vars) %>%
       corstars() %>%
       cbind.data.frame(var = names, .) %>%
       # mutate(var = new_row_names(.$var)) %>%
@@ -154,7 +154,7 @@ HARcorr <- function(df, vars, describe = TRUE, numbers = TRUE, headers = NULL, s
     num.var = paste0(ID, dot, var)
   )
 
-  corrtab %<>% select(-c(ID, dot, var))
+  corrtab %<>% dplyr::select(-c(ID, dot, var))
   corrtab %<>% relocate(num.var) %>% rename(var = num.var)
   corrtab <- data.frame(lapply(corrtab, as.character), stringsAsFactors=FALSE)
   corrtab[1, -c(1)] <- " "
