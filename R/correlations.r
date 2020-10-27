@@ -8,11 +8,11 @@
 new.describe <- function(df, vars){
 
 
-  descr.output <- df %>% select(!!!vars) %>%
+  descr.output <- df %>% dplyr::select(!!!vars) %>%
     psych::describe() %>%
     as.data.frame() %>%
     rownames_to_column("var") %>%
-    select(var,mean,sd,n, min, max)
+    dplyr::select(var,mean,sd,n, min, max)
 
   descr.output %<>% mutate(
 
@@ -27,7 +27,7 @@ new.describe <- function(df, vars){
   )
 
 
-  descr.output2 <- descr.output %>% select(var, "M" = mean.chr, "SD" = sd.chr, "n" = n.chr) %>% t() %>% data.frame() %>% tibble::rownames_to_column("var")
+  descr.output2 <- descr.output %>% dplyr::select(var, "M" = mean.chr, "SD" = sd.chr, "n" = n.chr) %>% t() %>% data.frame() %>% tibble::rownames_to_column("var")
 
   header.true <- function(df) {
 
@@ -331,13 +331,13 @@ table.corr <- function(df, vars, rows=auto, cols=auto, copy=FALSE){
   if(rows!=auto & cols!=auto){
 
     corrtab <- df %>%
-      select(!!!vars) %>%
+      dplyr::select(!!!vars) %>%
       corstarsl.all.kiIN(., rows, cols)
 
   } else{
 
     corrtab <- df %>%
-      select(!!!vars) %>%
+      dplyr::select(!!!vars) %>%
       corstarsl.all.kiIN() %>%
       rownames_to_column(., var = "var") %>%
       # mutate(var = new_row_names(.$var)) %>%
@@ -365,7 +365,7 @@ corstarsl.all.kiIN3 <- function(data, var.list, des, rows=auto, cols=auto, tri =
 
   auto = 0
 
-  x <- data %>% select(!!!var.list)
+  x <- data %>% dplyr::select(!!!var.list)
   #vars <- quos(vars)
 
   #col.end <- ncol(x)-length(des)
@@ -381,7 +381,7 @@ corstarsl.all.kiIN3 <- function(data, var.list, des, rows=auto, cols=auto, tri =
     col.start <- row.l+1
     col.end <-row.l+col.l
 
-    x <- x %>% select(vars)
+    x <- x %>% dplyr::select(vars)
 
   } else if(class(rows)=="numeric"& rows>0){
     auto <- 0
