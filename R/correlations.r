@@ -163,9 +163,9 @@ HARcorr <- function(df,
 
     corrtab <- df %>%
       corstarsl.all.kiIN3(., vars, control.vars, tri = triangle, round = round) %>%
-      tibble::rownames_to_column(., var = "var") %>%
+      tibble::rownames_to_column(., var = "var") #%>%
     # mutate(var = new_row_names(.$var)) %>%
-     slice(-1)
+     #slice(-1)
 
 
   if(!is.null(names)){
