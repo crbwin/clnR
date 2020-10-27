@@ -121,10 +121,13 @@ corstars <- function(x){
 #' @return a formatted correlation table
 #' @export
 
-HARcorr <- function(df, vars, describe = TRUE, numbers = TRUE, headers = NULL, spots = NULL, copy = FALSE, names = NULL, full.labels = FALSE){
+HARcorr <- function(df, vars, describe = TRUE, numbers = TRUE, headers = NULL, spots = NULL, copy = FALSE, names = NULL, full.labels = FALSE, partial = FALSE, control.vars = NULL, triangle = "lower"){
 
   ### General correlation function
   #### Change number or names of rows and columns to output only certain rows/columns.
+
+
+  if(partial==FALSE){
 
   if(is.null(names)){
 
@@ -142,6 +145,49 @@ HARcorr <- function(df, vars, describe = TRUE, numbers = TRUE, headers = NULL, s
       cbind.data.frame(var = names, .) %>%
       # mutate(var = new_row_names(.$var)) %>%
       slice(-1)
+
+  }
+
+  }else{
+
+
+    auto <- 0
+
+    corrtab <- df %>%
+      corstarsl.all.kiIN3(., vars, control.vars, tri = triangle, round = round) %>%
+      tibble::rownames_to_column(., var = "var")
+    # mutate(var = new_row_names(.$var)) %>%
+    # slice(-1)
+
+
+  if(!is.null(names)){
+
+    if(triangle=="lower"){
+      corrtab <- corrtab %<>%
+        mutate(var = names) #%>%
+      # mutate(var = new_row_names(.$var)) %>%
+      #slice(-1)
+      colnames(corrtab) <- c("var", names[1:length(names)-1])
+
+    } else if(triangle=="upper"){
+      colnames(corrtab) <- c("var", names)
+
+      # corrtab %<>% mutate(
+      #
+      #   var = names[1:length(names)-1],
+      #   .before = .[, 1]
+      # )
+      corrtab[,1] <- names[1:length(names)-1]
+
+    } else {
+
+      print("Please choose 'triangle = upper' or 'triangle = lower'.")
+    }
+
+
+  } else{
+
+  }
 
   }
 
