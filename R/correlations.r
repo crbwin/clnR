@@ -121,7 +121,15 @@ corstars <- function(x){
 #' @return a formatted correlation table
 #' @export
 
-HARcorr <- function(df, vars, describe = TRUE, numbers = TRUE, headers = NULL, spots = NULL, copy = FALSE, names = NULL, full.labels = FALSE, partial = FALSE, control.vars = NULL, triangle = "lower"){
+HARcorr <- function(df,
+                    vars,
+                    describe = TRUE,
+                    numbers = TRUE,
+                    headers = NULL, spots = NULL,
+                    copy = FALSE,
+                    names = NULL,
+                    full.labels = FALSE,
+                    partial = FALSE, control.vars = NULL, triangle = "lower", rows=auto, cols=auto){
 
   ### General correlation function
   #### Change number or names of rows and columns to output only certain rows/columns.
