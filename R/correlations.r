@@ -129,7 +129,7 @@ HARcorr <- function(df,
                     copy = FALSE,
                     names = NULL,
                     full.labels = FALSE,
-                    partial = FALSE, control.vars = NULL, triangle = "lower", rows=auto, cols=auto){
+                    partial = FALSE, control.vars = NULL, triangle = "lower", rows=auto, cols=auto, round = 3){
 
   ### General correlation function
   #### Change number or names of rows and columns to output only certain rows/columns.
